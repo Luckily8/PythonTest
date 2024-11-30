@@ -1,0 +1,13 @@
+====================
+### dict.keys()、dict.values() 和 dict.items() 返回的都是动态视图对象（ view objects）
+# 视图对象是动态的，受字典变化的影响，以下删除了字典的 key，视图对象转为列表后也跟着变化
+>>> del dishes['eggs']
+>>> del dishes['sausage']
+>>> list(keys)
+['bacon', 'spam']
+### 返回对象可以直接作为字符串使用
+tinydict = {'Name': 'Runoob', 'Age': 7}
+print ("Value : %s" %  tinydict.items())
+以上实例输出结果为：
+Value : dict_items([('Age', 7), ('Name', 'Runoob')])
+====================

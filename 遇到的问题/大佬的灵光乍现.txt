@@ -1,0 +1,11 @@
+====================
+1,字典遍历例子：7年前 (2017-07-17)
+遍历例子：
+
+d = {'Name': 'Runoob', 'Age': 7}
+for i,j in d.items():
+    print(i, ":\t", j)
+输出：
+
+Name :   Runoob
+Age :    7

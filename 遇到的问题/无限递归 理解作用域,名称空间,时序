@@ -1,0 +1,39 @@
+# 错误示范
+def wrap_new():
+    def wrapper(*args, **kwargs):
+        res = func1(*args, **kwargs)
+        # func1=111,这么些会被识别为使用先于定义,语法错误
+        print("over".center(50, "="))
+        return res
+
+    # 调用wrap_new()时,只是定义,未调用wrapper,所以wrapper内部处于未知状态,func1待定?
+    return wrapper
+
+
+def func1(str1):
+    print(str1)
+
+
+# 逻辑错误
+# 本质上是变量使用时序问题,wrapper内还未绑定变量,外部就已经将其改变,导致无限递归
+print(func1)
+func1 = wrap_new()  # 要使用闭包就必须考虑变量的查找顺序,使用时序,必须通过E区传参
+print(func1)  # 此时不会报错,因为wrapper本质上还是未被调用过
+func1("hello")  # 加上这句马上就会进入无限递归,wrapper->wrapper
+"""# 报错原因:
+# 编译器的负优化?到底是什么时候导致了func1=wrapper被传回了wrapper内?
+# 猜测一:编译器在运行完13,return wrapper 后再去定义wrapper,不太可能
+# 测试1:一开始不给wrap_new()参数,则预编译阶段res = func1(*args, **kwargs)中
+func1将会使用全局func1,而func1在wrapper定义前就已经被编译器认为是wrapper???
+"""
+
+
+"""  原文:
+导致无限递归的行是：
+func1 = wrap_new(func1)
+这是因为在定义装饰器 wrap_new 时，参数也命名为 func1。当执行 func1 = wrap_new(func1) 时，
+变量 func1 被重新赋值为内部的 wrapper 函数。在 wrapper 中，调用的 func1(*args, **kwargs)
+ 实际上指向了新的 func1（即 wrapper 本身），从而导致了无限递归。
+
+为了解决这个问题，可以修改装饰器的参数名，避免与全局函数名冲突，例如：
+"""

@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./Ordinary study/堆栈区"
+    ]
+}
